@@ -25,6 +25,15 @@
         object-fit: cover;
         object-position: 100% center;
         user-select: none;
+
+        /* For Opera and <= IE9, we need to add unselectable="on" attribute onto each element */
+        /* Check this site for more details: http://help.dottoro.com/lhwdpnva.php */
+             -moz-user-select: none; /* These user-select properties are inheritable, used to prevent text selection */
+            -webkit-user-select: none;
+            -ms-user-select: none; /* From IE10 only */
+            user-select: none; /* Not valid CSS yet, as of July 2012 */
+
+            -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
     }
 
     #track{
@@ -38,24 +47,26 @@
 </style>
 
 <body>
-    <div id="track" data-mouse-down-at="0" data-prev-percentage="0" data-prev-position="50" draggable="false">
+    <div id="track" data-mouse-down-at="0" data-prev-percentage="0" data-prev-position="50" draggable="false" onDragStart="{(e) => e.preventDefault()}">
 
-        <img class="image" src="imagenes/1.avif" draggable="false"/>
-        <img class="image" src="imagenes/2.avif" draggable="false"/>
-        <img class="image" src="imagenes/3.avif" draggable="false"/>
-        <img class="image" src="imagenes/4.avif" draggable="false"/>
-        <img class="image" src="imagenes/5.avif" draggable="false"/>
-        <img class="image" src="imagenes/6.avif" draggable="false"/>
-        <img class="image" src="imagenes/7.avif" draggable="false"/>
-        <img class="image" src="imagenes/8.avif" draggable="false"/>
+        <img class="image" src="imagenes/1.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" src="imagenes/2.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" src="imagenes/3.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" src="imagenes/4.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" src="imagenes/5.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" src="imagenes/6.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" src="imagenes/7.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" src="imagenes/8.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
     </div>
 
 </body>
 <script>
 
-    const track = document.getElementById("track");
+    document.addEventListener("DOMContentLoaded", () => {
 
-    const handleOnDown = e => {
+    const track = document.querySelector("#track");
+
+     const handleOnDown = e => {
         track.dataset.mouseDownAt = e.clientX;
     }
 
@@ -67,42 +78,53 @@
     const handleOnMove = e => {
          if(track.dataset.mouseDownAt === "0") return
 
-        const   mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX;
-        const   maxDelta = window.innerWidth / 2;
-
-        const   percentage = (mouseDelta / maxDelta) * -100;
+        const   mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX; 
+        
+        /* No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
+        /*const   maxDelta = window.innerWidth / 2;*/ 
+        
+        const   percentage = (mouseDelta / /*maxDelta*/ 2500) * -100;
+        
         const nextPercentageUnconstrained = parseFloat(track.dataset.prevPercentage) + percentage;
         const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
 
-        track.dataset.percentage = nextPercentage; /* Buscar esto, no entiendo de donde sale ese dataset.percentage*/
+        track.dataset.percentage = nextPercentage;
 
         track.animate({
             transform: `translate(${nextPercentage}%, -50%)`
-        }, {duration: 1000, fill: "forwards"});
+        }, {duration: 1200, fill: "forwards"});
 
-       actualPosition = parseFloat(track.dataset.prevPosition)
+       for (const image of [...document.querySelectorAll('.image')]){                    
+        image.animate({
+            objectPosition: `${nextPercentage + 100}% center`
+        }, {duration: 1200, fill: "forwards"});
 
-
-        for (const image of track.getElementsByClassName("image")){
-                       
-            image.animate({
-                objectPosition: `${nextPercentage + 100}% center`
-
-            }, {duration: 1000, fill: "forwards"});
-
-        }
     }
-        window.onmousedown = e => handleOnDown(e);
+}
 
+        window.addEventListener("mousedown" , e =>  handleOnDown(e) );
+        window.addEventListener("mouseup"   , e =>  handleOnUp(e)   );
+        window.addEventListener("mousemove" , e =>  handleOnMove(e) );
+
+        /*  Reemplacé los onmouse por addEventListener
+
+            window.onmousedown = e =>   handleOnDown(e);
+            window.onmousemove = e => handleOnMove(e);
+            window.onmouseup = e => handleOnUp(e); */
+        /*
+            Para que ande en mobile, lo dejo para despues:
+            
         window.ontouchstart = e => handleOnDown(e.touches[0]);
-
-        window.onmouseup = e => handleOnUp(e);
-
         window.ontouchend = e => handleOnUp(e.touches[0]);
-
-        window.onmousemove = e => handleOnMove(e);
-
         window.ontouchmove = e => handleOnMove(e.touches[0]);
+        */
+})
+
+/*I would have suggested that mouse down starts a function that stores all stages of the slider 
+and mouse move and mouseup are only created inside this function and destroyed upon mouseup. 
+This way you don't leave untracked window listeners and you don't need html state updates.
+
+*/
 </script>
 
 </html>
