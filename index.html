@@ -19,7 +19,7 @@
         margin: 0rem;
         overflow: hidden;
     }
-    #track > img{
+    #track > .image{
         width: 40vmin;
         height: 56vmin;
         object-fit: cover;
@@ -41,13 +41,17 @@
         left: 40%;
         top: 50%;
         transform: translate(0%, -50%);
+        user-select: none;
+        -moz-user-select: none; 
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-drag: none; 
+                    
     } 
 </style>
 
 <body>
-    <div id="track" 
-  
-    draggable="false" onDragStart="{(e) => e.preventDefault()}">
+    <div id="track"  draggable="false" onDragStart="{(e) => e.preventDefault()}">
 
         <img class="image" src="imagenes/1.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
         <img class="image" src="imagenes/2.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
