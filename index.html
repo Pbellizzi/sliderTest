@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        margin: 0rem;
+        overflow: hidden;
+    }
+    #track > img{
+        width: 40vmin;
+        height: 56vmin;
+        object-fit: cover;
+        object-position: 100% center;
+        user-select: none;
+    }
+
+    #track{
+        display: flex;
+        gap: 3vmin;
+        position: absolute;
+        left: 40%;
+        top: 50%;
+        transform: translate(0%, -50%);
+    } 
+</style>
+
+<body>
+    <div id="track" data-mouse-down-at="0" data-prev-percentage="0" data-prev-position="50">
+
+        <!-- <img class="image" src="/imagenes/0.jpg"    draggable="false"   >
+        <img class="image" src="/imagenes/1.jpg"    draggable="false"   >
+        <img class="image" src="/imagenes/12.jpg"   draggable="false"   >
+        <img class="image" src="/imagenes/13.jpg"   draggable="false"   >
+        <img class="image" src="/imagenes/15.jpg"   draggable="false"   >
+        <img class="image" src="/imagenes/18.jpg"   draggable="false"   >
+        <img class="image" src="/imagenes/6.jpg"    draggable="false"   > -->
+        <img class="image" src="/imagenes/1.avif" draggable="false"/>
+        <img class="image" src="/imagenes/2.avif" draggable="false"/>
+        <img class="image" src="/imagenes/3.avif" draggable="false"/>
+        <img class="image" src="/imagenes/4.avif" draggable="false"/>
+        <img class="image" src="/imagenes/5.avif" draggable="false"/>
+        <img class="image" src="/imagenes/6.avif" draggable="false"/>
+        <img class="image" src="/imagenes/7.avif" draggable="false"/>
+        <img class="image" src="/imagenes/8.avif" draggable="false"/>
+    </div>
+
+</body>
+<script>
+
+    const track = document.getElementById("track");
+
+    const handleOnDown = e => {
+        track.dataset.mouseDownAt = e.clientX;
+    }
+
+    const handleOnUp = () => {
+        track.dataset.mouseDownAt = "0";
+        track.dataset.prevPercentage = track.dataset.percentage;
+    }
+
+    const handleOnMove = e => {
+         if(track.dataset.mouseDownAt === "0") return
+
+        const   mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX;
+        const   maxDelta = window.innerWidth / 2;
+
+        const   percentage = (mouseDelta / maxDelta) * -100;
+        const nextPercentageUnconstrained = parseFloat(track.dataset.prevPercentage) + percentage;
+        const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
+
+        track.dataset.percentage = nextPercentage; /* Buscar esto, no entiendo de donde sale ese dataset.percentage*/
+
+        track.animate({
+            transform: `translate(${nextPercentage}%, -50%)`
+        }, {duration: 1000, fill: "forwards"});
+
+       actualPosition = parseFloat(track.dataset.prevPosition)
+
+
+        for (const image of track.getElementsByClassName("image")){
+                       
+            image.animate({
+                objectPosition: `${nextPercentage + 100}% center`
+
+            }, {duration: 1000, fill: "forwards"});
+
+        }
+    }
+        window.onmousedown = e => handleOnDown(e);
+
+        window.ontouchstart = e => handleOnDown(e.touches[0]);
+
+        window.onmouseup = e => handleOnUp(e);
+
+        window.ontouchend = e => handleOnUp(e.touches[0]);
+
+        window.onmousemove = e => handleOnMove(e);
+
+        window.ontouchmove = e => handleOnMove(e.touches[0]);
+</script>
+
+</html>
