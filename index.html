@@ -12,6 +12,7 @@
         padding: 0;
         box-sizing: border-box;
     }
+
     body{
         width: 100vw;
         height: 100vh;
@@ -19,43 +20,40 @@
         margin: 0rem;
         overflow: hidden;
     }
+
     #track > .image{
         width: 40vmin;
         height: 56vmin;
         object-fit: cover;
         object-position: 100% center;
-
         user-select: none;
-
         -moz-user-select: none; 
         -webkit-user-select: none;
         -ms-user-select: none;
-        -webkit-user-drag: none; 
-                    
+        -webkit-user-drag: none;              
     }
 
     #track{
         display: flex;
         gap: 3vmin;
         position: absolute;
-        left: 40%;
-        top: 50%;
+        left:   40%;
+        top:    50%;
         transform: translate(0%, -50%);
         user-select: none;
         -moz-user-select: none; 
         -webkit-user-select: none;
         -ms-user-select: none;
         -webkit-user-drag: none; 
-                    
     } 
 </style>
 
 <body>
     <div id="track"  draggable="false" onDragStart="{(e) => e.preventDefault()}">
 
-        <img class="image" src="imagenes/1.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" id="prueba" src="imagenes/1.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
         <img class="image" src="imagenes/2.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
-        <img class="image" src="imagenes/3.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
+        <img class="image" id="prueba3"src="imagenes/3.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
         <img class="image" src="imagenes/4.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
         <img class="image" src="imagenes/5.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
         <img class="image" src="imagenes/6.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
@@ -67,6 +65,17 @@
 <script>
    
 document.addEventListener("DOMContentLoaded", () => {
+    /* usar esto para calcular en relacion a la posicion de la imagen*/
+    /*let elRect = document.getElementById('prueba3').getBoundingClientRect();
+    let resultado1 = window.innerWidth /2 - (elRect.right - elRect.width)
+    let resultado2 = window.innerWidth /2 - elRect.left
+    console.log( resultado1)
+    console.log( resultado2)
+    console.log( window.innerWidth)
+    let center =    166
+    let left   =    834
+    let right  =    0*/
+
 
     const track = document.querySelector("#track");
     const images = [...document.querySelectorAll('.image')]
@@ -74,7 +83,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let mouseDownAt = 0; 
     let movedPercentage = 0; 
     let prevPercentage = 0;
-    
+
+    for (image of images){
+        let elRect    =   image.getBoundingClientRect();
+        let posicion  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+        image.style.objectPosition = `${posicion}% center`
+    }
+
     const handleOnDown = e => {
         mouseDownAt = e.clientX
         }
@@ -101,12 +116,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         track.animate({
             transform: `translate(${nextPercentage}%, -50%)`
-        }, {duration: 1200, fill: "forwards"});
+        }, {duration: 800, fill: "forwards"});
 
-       for (image of images){                    
+       for (image of images){
+        let elRect    =   image.getBoundingClientRect();
+        let posicion  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
         image.animate({
-            objectPosition: `${nextPercentage + 100}% center`
+            objectPosition: `${posicion}% center`
         }, {duration: 1200, fill: "forwards"}); }
+        
+        /*image.animate({
+            objectPosition: `${nextPercentage + 100}% center`
+        }, {duration: 1200, fill: "forwards"}); }*/
     }
 
         window.addEventListener("mousedown" , e =>  handleOnDown(e) );
