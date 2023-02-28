@@ -34,10 +34,11 @@
     }
 
     #track{
+        margin-left: -20vmin; 
         display: flex;
         gap: 3vmin;
         position: absolute;
-        left:   40%;
+        left:   50%;
         top:    50%;
         transform: translate(0%, -50%);
         user-select: none;
@@ -50,7 +51,6 @@
 
 <body>
     <div id="track"  draggable="false" onDragStart="{(e) => e.preventDefault()}">
-
         <img class="image" id="prueba" src="imagenes/1.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
         <img class="image" src="imagenes/2.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
         <img class="image" id="prueba3"src="imagenes/3.avif" draggable="false" onDragStart="{(e) => e.preventDefault()}"/>
@@ -65,17 +65,6 @@
 <script>
    
 document.addEventListener("DOMContentLoaded", () => {
-    /* usar esto para calcular en relacion a la posicion de la imagen*/
-    /*let elRect = document.getElementById('prueba3').getBoundingClientRect();
-    let resultado1 = window.innerWidth /2 - (elRect.right - elRect.width)
-    let resultado2 = window.innerWidth /2 - elRect.left
-    console.log( resultado1)
-    console.log( resultado2)
-    console.log( window.innerWidth)
-    let center =    166
-    let left   =    834
-    let right  =    0*/
-
 
     const track = document.querySelector("#track");
     const images = [...document.querySelectorAll('.image')]
@@ -99,6 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
         movedPercentage = prevPercentage
     }
 
+    track.addEventListener('animationend', () => {
+        console.log('Animation ended');
+    });
+
     const handleOnMove = e => 
     {
          if(mouseDownAt == "0") return
@@ -107,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
         /* No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
         /*const   maxDelta = window.innerWidth / 2;*/ 
         
-        const percentage = (mouseDelta / /*maxDelta*/ 2000) * -100;
+        const percentage = (mouseDelta / /*maxDelta*/ 3000) * -100;
 
         const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
         const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
@@ -116,14 +109,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         track.animate({
             transform: `translate(${nextPercentage}%, -50%)`
-        }, {duration: 800, fill: "forwards"});
+        }, {duration: 200, fill: "forwards"});
 
        for (image of images){
         let elRect    =   image.getBoundingClientRect();
         let posicion  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
         image.animate({
             objectPosition: `${posicion}% center`
-        }, {duration: 1200, fill: "forwards"}); }
+        }, {duration: 800, fill: "forwards"}); }
         
         /*image.animate({
             objectPosition: `${nextPercentage + 100}% center`
