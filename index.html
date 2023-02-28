@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         /* No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
         /*const   maxDelta = window.innerWidth / 2;*/ 
         
-        const percentage = (mouseDelta / /*maxDelta*/ 2000) * -100;
+        const percentage = (mouseDelta / /*maxDelta*/  window.innerWidth) * -100;
 
         const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
         const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
@@ -118,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
            
     Promise.all(track.getAnimations().map((animation) => animation.finished)).then(
         () => {
-
                 for (image of images){
                     let elRect    =   image.getBoundingClientRect();
                     let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
