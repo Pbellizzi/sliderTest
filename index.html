@@ -63,29 +63,39 @@
 
 </body>
 <script>
-   
-document.addEventListener("DOMContentLoaded", () => {
-
-    const track = document.querySelector("#track");
-    const images = [...document.querySelectorAll('.image')]
+    let track = document.querySelector("#track");
+    let images = [...document.querySelectorAll('.image')]
 
     let mouseDownAt = 0; 
     let movedPercentage = 0; 
     let prevPercentage = 0;
 
-    for (image of images){
-        let elRect    =   image.getBoundingClientRect();
-        let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-        let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
-        image.style.objectPosition = `${posicion}% center`
+    window.addEventListener("mousedown" , e =>  handleOnDown(e) );
+    window.addEventListener("mousemove" , e =>  handleOnMove(e) );
+    window.addEventListener("mouseup"   , e =>  handleOnUp(e)   );
+    window.ontouchstart = e => handleOnDown(e.touches[0]);
+    window.ontouchend = e => handleOnUp(e.touches[0]);
+    window.ontouchmove = e => handleOnMove(e.touches[0]);
 
-    }
+    function animateImages(){
+    for (image of images){
+            let elRect    =   image.getBoundingClientRect();
+            let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+            let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
+            image.animate({
+                objectPosition: `${posicion}% center`
+            }, {duration: 1200, fill: "forwards"})
+            /*image.style.objectPosition = `${posicion}% center`*/
+                            }
+            window.requestAnimationFrame(animateImages)
+                        }
+    animateImages()
 
     const handleOnDown = e => {
         mouseDownAt = e.clientX
         }
 
-        const handleOnUp = () => {
+    const handleOnUp = () => {
             mouseDownAt = 0;
             movedPercentage = prevPercentage
         }
@@ -108,41 +118,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         track.animate({
             transform: `translate(${nextPercentage}%, -50%)`
-        }, {duration: 150, fill: "forwards"});
+        }, {duration: 1200, fill: "forwards"});
 
 
-        /*image.animate({
-            objectPosition: `${nextPercentage + 100}% center`
-        }, {duration: 1200, fill: "forwards"}); }*/
-
-           
+/*
     Promise.all(track.getAnimations().map((animation) => animation.finished)).then(
-        () => {
-                for (image of images){
-                    let elRect    =   image.getBoundingClientRect();
-                    let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-                    let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
-                    image.animate({
-                        objectPosition: `${posicion}% center`
-                    }, {duration: 1000, fill: "forwards"}); }
-            }         
-      );
-    
+            () => {
+                        for (image of images){
+                        let elRect    =   image.getBoundingClientRect();
+                        let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+                        let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
+                        image.animate({
+                            objectPosition: `${posicion}% center`
+                        }, {duration: 300, fill: "forwards"}); }
+                }         
+        );*/
     }
 
+/*
+    document.addEventListener("DOMContentLoaded", () => {
 
-        window.addEventListener("mousedown" , e =>  handleOnDown(e) );
-        window.addEventListener("mouseup"   , e =>  handleOnUp(e)   );
-        window.addEventListener("mousemove" , e =>  handleOnMove(e) );
-
-        /*
-            Para que ande en mobile, lo dejo para despues:
-
-        window.ontouchstart = e => handleOnDown(e.touches[0]);
-        window.ontouchend = e => handleOnUp(e.touches[0]);
-        window.ontouchmove = e => handleOnMove(e.touches[0]);
-        */
-})
+})*/
 
 </script>
 
