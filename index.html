@@ -75,22 +75,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (image of images){
         let elRect    =   image.getBoundingClientRect();
-        let posicion  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+        let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+        let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
         image.style.objectPosition = `${posicion}% center`
+
     }
 
     const handleOnDown = e => {
         mouseDownAt = e.clientX
         }
 
-    const handleOnUp = () => {
-        mouseDownAt = 0;
-        movedPercentage = prevPercentage
-    }
-
-    track.addEventListener('animationend', () => {
-        console.log('Animation ended');
-    });
+        const handleOnUp = () => {
+            mouseDownAt = 0;
+            movedPercentage = prevPercentage
+        }
+    
 
     const handleOnMove = e => 
     {
@@ -100,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         /* No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
         /*const   maxDelta = window.innerWidth / 2;*/ 
         
-        const percentage = (mouseDelta / /*maxDelta*/ 3000) * -100;
+        const percentage = (mouseDelta / /*maxDelta*/ 2000) * -100;
 
         const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
         const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
@@ -109,19 +108,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
         track.animate({
             transform: `translate(${nextPercentage}%, -50%)`
-        }, {duration: 200, fill: "forwards"});
+        }, {duration: 300, fill: "forwards"});
 
-       for (image of images){
-        let elRect    =   image.getBoundingClientRect();
-        let posicion  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-        image.animate({
-            objectPosition: `${posicion}% center`
-        }, {duration: 800, fill: "forwards"}); }
-        
+
         /*image.animate({
             objectPosition: `${nextPercentage + 100}% center`
         }, {duration: 1200, fill: "forwards"}); }*/
+
+           
+    Promise.all(track.getAnimations().map((animation) => animation.finished)).then(
+        () => {
+
+                for (image of images){
+                    let elRect    =   image.getBoundingClientRect();
+                    let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+                    let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
+                    image.animate({
+                        objectPosition: `${posicion}% center`
+                    }, {duration: 900, fill: "forwards"}); }
+            }         
+      );
+    
     }
+
 
         window.addEventListener("mousedown" , e =>  handleOnDown(e) );
         window.addEventListener("mouseup"   , e =>  handleOnUp(e)   );
