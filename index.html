@@ -63,6 +63,7 @@
 
 </body>
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
     let track = document.querySelector("#track");
     let images = [...document.querySelectorAll('.image')]
 
@@ -109,7 +110,7 @@
         /* No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
         /*const   maxDelta = window.innerWidth / 2;*/ 
         
-        const percentage = (mouseDelta / /*maxDelta*/  window.innerWidth) * -100;
+        const percentage = (mouseDelta / /*maxDelta*/  2000) * -100;
 
         const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
         const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
@@ -135,10 +136,10 @@
         );*/
     }
 
-/*
-    document.addEventListener("DOMContentLoaded", () => {
 
-})*/
+
+
+})
 
 </script>
 
