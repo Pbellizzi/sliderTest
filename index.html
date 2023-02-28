@@ -5,50 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<style>
-    *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
 
-    }
-
-    body{
-        width: 100vw;
-        height: 100vh;
-        background-color: black;
-        margin: 0rem;
-        overflow: hidden;
-    }
-
-    #track > .image{
-        width: 40vmin;
-        height: 56vmin;
-        object-fit: cover;
-        object-position: 100% center;
-        user-select: none;
-        -moz-user-select: none; 
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        -webkit-user-drag: none;              
-    }
-
-    #track{
-        margin-left: -20vmin; 
-        display: flex;
-        gap: 3vmin;
-        position: absolute;
-        left:   50%;
-        top:    50%;
-        transform: translate(0%, -50%);
-        user-select: none;
-        -moz-user-select: none; 
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        -webkit-user-drag: none; 
-    } 
-</style>
 
 <body>
     <div id="track"  draggable="false" >
@@ -61,91 +20,7 @@
         <img class="image" src="imagenes/7.avif" draggable="false" />
         <img class="image" src="imagenes/8.avif" draggable="false" />
     </div>
-
+    <audio style="display: none;" controls src="https://cdns-preview-f.dzcdn.net/stream/c-f7d7cc6a926783324d78bed8b2966f23-6.mp3"></audio>
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-    let track = document.querySelector("#track");
-    let images = [...document.querySelectorAll('.image')]
-
-    let mouseDownAt = 0; 
-    let movedPercentage = 0; 
-    let prevPercentage = 0;
-
-    window.addEventListener("mousedown" ,(e) => handleOnDown(e));
-    window.addEventListener("mousemove" ,(e) => handleOnMove(e));
-    window.addEventListener("mouseup"   ,(e) => handleOnUp(e)  );
-
-    /*window.ontouchstart = e => handleOnDown(e.touches[0]);
-    window.ontouchend = e => handleOnUp(e.touches[0]);
-    window.ontouchmove = e => handleOnMove(e.touches[0]);*/
-
-    for (image of images){
-        let elRect    =   image.getBoundingClientRect();
-        let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-        let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
-        image.style.objectPosition = `${posicion}% center`
-                        }
-                    
-
-    const handleOnDown = e => {
-        mouseDownAt = parseInt(e.clientX)
-        }
-
-    const handleOnUp = () => {
-            mouseDownAt = 0;
-            movedPercentage = prevPercentage
-        }
-    
- 
-    const handleOnMove = e => {
-         if((mouseDownAt) === 0) return
-        const mouseDelta = parseFloat(mouseDownAt) - e.clientX; 
-    
-        /* No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
-        /*const   maxDelta = window.innerWidth / 2;*/ 
-        
-        const percentage = (mouseDelta / /*maxDelta*/  2000) * -100;
-
-        const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
-        const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
-
-        prevPercentage = nextPercentage;
-
-        track.animate({
-            transform: `translate(${nextPercentage}%, -50%)`
-        }, {duration: 1000, fill: "forwards"});
-
-
-/*
-    Promise.all(track.getAnimations().map((animation) => animation.finished)).then(
-            () => {
-                        for (image of images){
-                        let elRect    =   image.getBoundingClientRect();
-                        let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-                        let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
-                        image.animate({
-                            objectPosition: `${posicion}% center`
-                        }, {duration: 300, fill: "forwards"}); }
-                }         
-        );*/
-    }
-    function animateImages(){
-        for (image of images){
-                let elRect    =   image.getBoundingClientRect();
-                let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-                let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
-                image.animate({objectPosition: `${posicion}% center`}, {duration: 1200, fill: "forwards"})
-                                }
-                requestAnimationFrame(animateImages)
-                /*window.requestAnimationFrame(animateImages)*/
-
-                            }
-    
-    animateImages()
-
-})
-
-</script>
-
+<script src="script.js"></script>
 </html>
