@@ -78,6 +78,14 @@
     window.ontouchend = e => handleOnUp(e.touches[0]);
     window.ontouchmove = e => handleOnMove(e.touches[0]);
 
+    for (image of images){
+        let elRect    =   image.getBoundingClientRect();
+        let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+        let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
+        image.style.objectPosition = `${posicion}% center`
+                        }
+                    
+
     function animateImages(){
     for (image of images){
             let elRect    =   image.getBoundingClientRect();
