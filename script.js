@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+    /*document.addEventListener( 'visibilitychange' , function() {
+        if (document.hidden) {
+            console.log('bye');
+            window.cancelAnimationFrame(animateImages)
+        } else {
+            console.log('well back');
+            window.requestAnimationFrame(animateImages)
+            track.getAnimations().map((animation) => animation.finished)
+        }
+    }, false );*/
+
+
     const audio = document.querySelector("audio");
     let track = document.querySelector("#track");
     let images = [...document.querySelectorAll('.image')]
@@ -22,29 +34,39 @@ document.addEventListener("DOMContentLoaded", () => {
         /*image.style.objectPosition = `${posicion}% center`*/
         image.setAttribute = ("objectPosition",`${posicion}% center`)
                         }
-                    
+    
+    function animateImages(){
+        for (image of images){
+                let elRect    =   image.getBoundingClientRect();
+                let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
+                let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
+                image.animate({objectPosition: `${posicion}% center`}, {duration: 1200, fill: "forwards"})
+                                }
+                window.requestAnimationFrame(animateImages)
+
+                            }
 
     const handleOnDown = e => {
         mouseDownAt = parseInt(e.clientX)
         }
 
     const handleOnUp = () => {
-        /*audio.pause();*/
-            mouseDownAt = 0;
+            audio.pause();
+             mouseDownAt = 0;
             movedPercentage = prevPercentage
         }
     
  
     const handleOnMove = e => {
          if((mouseDownAt) === 0) return
-         /*audio.play()*/
+
 
         const mouseDelta = parseFloat(mouseDownAt) - e.clientX; 
     
-        /* No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
+        /*No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
         /*const   maxDelta = window.innerWidth / 2;*/ 
-        
-        const percentage = (mouseDelta / /*maxDelta*/  2000) * -100;
+     
+        const percentage = (mouseDelta / 2000) * -100;
 
         const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
         const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
@@ -54,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         track.animate({
             transform: `translate(${nextPercentage}%, -50%)`
         }, {duration: 1000, fill: "forwards"});
-
+    }
 
 /*
     Promise.all(track.getAnimations().map((animation) => animation.finished)).then(
@@ -68,19 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         }, {duration: 300, fill: "forwards"}); }
                 }         
         );*/
-    }
-    function animateImages(){
-        for (image of images){
-                let elRect    =   image.getBoundingClientRect();
-                let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-                let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
-                image.animate({objectPosition: `${posicion}% center`}, {duration: 1200, fill: "forwards"})
-                                }
-                window.requestAnimationFrame(animateImages)
 
-                            }
-    
+
+
     window.requestAnimationFrame(animateImages)
-
-
+                   
 })
