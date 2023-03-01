@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.ontouchend = e => handleOnUp(e.touches[0]);
     window.ontouchmove = e => handleOnMove(e.touches[0]);*/
 
+    
     for (image of images){
         let elRect    =   image.getBoundingClientRect();
         let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.requestAnimationFrame(animateImages)
 
                             }
+
 
     const handleOnDown = e => {
         mouseDownAt = parseInt(e.clientX)
@@ -74,7 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
         prevPercentage = nextPercentage;
 
         track.animate({
-            transform: `translate(${nextPercentage}%, -50%)`
+            /*transform: `translate(${nextPercentage}%, -50%)`*/
+            transform: `translate3d(${nextPercentage}%, -50%, 0)`
+
         }, {duration: 1000, fill: "forwards"});
     }
 
