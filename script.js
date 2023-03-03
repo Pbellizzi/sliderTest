@@ -3,9 +3,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     
+    function fadeOut(){
+        if(audio.volume >= 0.1){
+            audio.volume -= 0.1;
+            setTimeout(fadeOut, 50);
+        }else{
+            audio.pause()
+;
+        }
+    }
 
+    function fadeIn(){
+        if(audio.paused){audio.play()}
+        
+        if(audio.volume.toFixed(2) <= 0.8){
+            audio.volume += 0.1;
+            setTimeout(fadeIn, 50);
+        }else{
+            return;
+        }
+    }
 
     const audio = document.querySelector("audio");
+
     const track = document.querySelector("#track");
     const images = [...document.querySelectorAll('.image')]
 
@@ -21,18 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
     window.ontouchmove = e => handleOnMove(e.touches[0]);
 
     const handleOnDown = e => {
-          audio.play()
-          mouseDownAt = parseInt(e.clientX)
-        }
+            mouseDownAt = parseInt(e.clientX)
+            fadeIn()
+            console.log(audio.volume)
 
-    const handleOnUp = () => {
-        
-            audio.pause();
-            mouseDownAt = 0;
-            movedPercentage = prevPercentage
+          
         }
 
     const handleOnMove = e => {
+
          if((mouseDownAt) === 0) return
         const mouseDelta = parseFloat(mouseDownAt) - e.clientX;    
         /*No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
@@ -44,6 +61,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+    const handleOnUp = () => {
+            fadeOut()
+            console.log(audio.volume)
+            mouseDownAt = 0;
+            movedPercentage = prevPercentage
+        }
 
     /* Puse ambas animaciones  en la misma funcion. Queda revisar si puedo sacar el for loop de la animacion*/
 
