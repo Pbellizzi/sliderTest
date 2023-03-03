@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     const audio = document.querySelector("audio");
-    let track = document.querySelector("#track");
-    let images = [...document.querySelectorAll('.image')]
+    const track = document.querySelector("#track");
+    const images = [...document.querySelectorAll('.image')]
 
     let mouseDownAt     = 1; 
     let movedPercentage = 0; 
@@ -16,11 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("mousedown" ,(e) => handleOnDown(e));
     window.addEventListener("mouseup"   ,(e) => handleOnUp(e)  );
     window.addEventListener("mousemove" ,(e) => handleOnMove(e));
-    /*window.ontouchstart = e => handleOnDown(e.touches[0]);
+    window.ontouchstart = e => handleOnDown(e.touches[0]);
     window.ontouchend = e => handleOnUp(e.touches[0]);
-    window.ontouchmove = e => handleOnMove(e.touches[0]);*/
+    window.ontouchmove = e => handleOnMove(e.touches[0]);
 
     const handleOnDown = e => {
+          audio.play()
           mouseDownAt = parseInt(e.clientX)
         }
 
