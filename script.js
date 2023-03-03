@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-    const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-    let request
+    
+
 
     const audio = document.querySelector("audio");
     let track = document.querySelector("#track");
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
        
     request = requestAnimationFrame(function(){animateImages()})
-    console.log(request)       
+ 
 })
 
 /*Ideas*/
@@ -86,3 +86,5 @@ document.addEventListener("DOMContentLoaded", () => {
                             objectPosition: `${posicion}% center`
                         }, {duration: 300, fill: "forwards"}); }
                ;*/
+
+/*const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;*/
