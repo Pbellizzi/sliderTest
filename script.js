@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let mouseDownAt     = 1; 
     let movedPercentage = 0; 
     let prevPercentage  = 0;
-    let nextPercentageOut = 0
 
     window.addEventListener("mousedown" ,(e) => handleOnDown(e));
     window.addEventListener("mouseup"   ,(e) => handleOnUp(e)  );
@@ -41,9 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
         const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
         prevPercentage = nextPercentage;
-        /*track.animate({            transform: `translate3d(${nextPercentage}%, -50%, 0)`
-        }, {duration: 1000, fill: "forwards"});*/
-        /*nextPercentageOut = nextPercentage*/
+
     }
 
 
