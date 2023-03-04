@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    
+    
+    
+    
+    
     /*
     function fadeOut(){
         if(audio.volume.toFixed(2)  >= 0.1){
@@ -24,11 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }*/
 
     const audio = document.querySelector("audio");
-
     const track = document.querySelector("#track");
     const images = [...document.querySelectorAll('.image')]
 
-    let mouseDownAt     = 1; 
+    let mouseDownAt     = 0; 
     let movedPercentage = 0; 
     let prevPercentage  = 0;
 
@@ -40,20 +44,18 @@ document.addEventListener("DOMContentLoaded", () => {
     window.ontouchmove = e => handleOnMove(e.touches[0]);*/
 
     const handleOnDown = e => {
-            audio.play()
-        
+            /*audio.play()*/
             mouseDownAt = parseInt(e.clientX)
             console.log(audio.volume)
         }
 
         
     const handleOnUp = () => {
-        audio.pause()
+        /*audio.pause()*/
         mouseDownAt = 0;
         movedPercentage = prevPercentage
     }
     const handleOnMove = e => {
-
          if((mouseDownAt) === 0) return
         const mouseDelta = parseFloat(mouseDownAt) - e.clientX;    
         /*No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
