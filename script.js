@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const handleOnMove = e => {
          if((mouseDownAt) === 0) return
+         console.log(1)
         const mouseDelta = parseFloat(mouseDownAt) - e.clientX;    
         /*No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
         /*const   maxDelta = window.innerWidth / 2;*/ 
@@ -71,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function animateImages(){
         for (image of images){
+            console.log(2)
             let elRect    =   image.getBoundingClientRect();
             let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
             let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
