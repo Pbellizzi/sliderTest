@@ -50,9 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("mousedown",(e) =>{
         mouseDownAt = e.clientX;
-
     })
-
     window.addEventListener("mouseup"   ,(e) => {
         mouseDownAt = -1;
         movedPercentage = prevPercentage;
@@ -81,11 +79,11 @@ Tambien verifico que algo haya cambiado antes de animar*/
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
                 posiciones[i] = lerp(old_posiciones[i],posiciones[i],0.8)
-                images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 1200, fill: "forwards"});
+                images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 3000, fill: "forwards"});
                 old_posiciones[i] = posiciones [i];
             }
         }}
-        track.animate({transform: transform},{duration: 800, fill: "forwards"});    
+        track.animate({transform: transform},{duration: 2000, fill: "forwards"});    
         window.requestAnimationFrame(animateImages);        
     }
     window.requestAnimationFrame(animateImages);
