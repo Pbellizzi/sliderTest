@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!(images[0].getBoundingClientRect().left == control)) {
             posiciones = images.map(calcularPosicion)
             control = images[0].getBoundingClientRect().left
+
         }
     }
     
@@ -58,8 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
             transform =  `translate3d(${nextPercentage}%, -50%, 0)`
         }
     })
-
-
 
 /* Puse ambas animaciones  en la misma funcion. 
 Saque toda modificacion de atributos de la animacion. 
