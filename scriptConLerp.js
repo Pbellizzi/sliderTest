@@ -80,8 +80,8 @@ Tambien verifico que algo haya cambiado antes de animar*/
         if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
-                posiciones[i] = lerp(old_posiciones[i],posiciones[i],0.1)
-                images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 800, fill: "forwards"});
+                posiciones[i] = lerp(old_posiciones[i],posiciones[i],0.8)
+                images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 1200, fill: "forwards"});
                 old_posiciones[i] = posiciones [i];
             }
         }}
