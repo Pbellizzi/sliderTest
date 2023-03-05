@@ -69,7 +69,6 @@ function animateImages(){
         if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
-                //images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 1000, fill: "forwards"})
                 images[i].animate({objectPosition: posiciones[i]}, {duration: 1200, fill: "forwards"})
                 old_posiciones[i] = posiciones [i]
             }
