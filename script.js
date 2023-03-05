@@ -1,50 +1,57 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const track = document.querySelector("#track");
-    const images = [...document.querySelectorAll('.image')]
-    let control = images[0].getBoundingClientRect().left
-    let mouseDownAt     = 0; 
-    let movedPercentage = 0; 
-    let prevPercentage  = 0;
-    let posiciones = images.map(calcularPosicion)
-    let old_posiciones = images.map(calcularPosicion)
-    let transform = ''
-    let old_transform = '' // esto parece jankear la animacion si lo pongo en el animateImages()
+const track = document.querySelector("#track");
+const images = [...document.querySelectorAll('.image')];
+let control = images[0].getBoundingClientRect().left; /*imagen arbitraria para controla si algo se movio*/ 
+let mouseDownAt     = 0; 
+let movedPercentage = 0; 
+let prevPercentage  = 0;
+let posiciones = images.map(calcularPosicion);
+let old_posiciones = images.map(calcularPosicion);
+let transform = '';
+let old_transform = '';  // este control parece jankear la animacion si lo pongo en el animateImages()
 
+let fps = 60; /*esto es para el loop que calcula las posiciones de las imagenes*/ 
+
+function init() {
     for (let i = 0; i < images.length; i++) { 
-            images[i].style.objectPosition = posiciones[i]
-        }
-
-    function calcularPosicion(image){
-            let elRect  =   image.getBoundingClientRect();
-        if  (elRect.left + elRect.width <= 0 && elRect.right - elRect.width - window.innerWidth >= 0) return 0
-            let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
-            let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
-            posicion = `${posicion}% center`
-            return posicion
-    }  
-
-    function mapPosiciones(){
-        if (!(images[0].getBoundingClientRect().left == control)) {
-            posiciones = images.map(calcularPosicion)
-            control = images[0].getBoundingClientRect().left
-
-        }
+        images[i].style.objectPosition = posiciones[i]
     }
-    
-    let fps = 60
+  } 
+
+
+function calcularPosicion(image){
+    let elRect  =   image.getBoundingClientRect();
+    if  (elRect.left + elRect.width <= 0 && elRect.right - elRect.width - window.innerWidth >= 0) return 0;
+    let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100;
+    let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0);
+    posicion = `${posicion}% center`;
+    return posicion;
+};
+
+function mapPosiciones(){
+    if (!(images[0].getBoundingClientRect().left == control)) {
+        posiciones = images.map(calcularPosicion);
+        control = images[0].getBoundingClientRect().left;
+
+    };
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    init()
+
     function loop(){
-        mapPosiciones()
-        setTimeout(loop, 1000 / fps)
-    }
-    loop()
+        mapPosiciones();
+        setTimeout(loop, 1000 / fps);
+    };
+    loop();
 
     window.addEventListener("mousedown",(e) =>{
-        mouseDownAt = e.clientX
+        mouseDownAt = e.clientX;
     })
 
     window.addEventListener("mouseup"   ,(e) => {
         mouseDownAt = 0;
-        movedPercentage = prevPercentage
+        movedPercentage = prevPercentage;
     })
 
     window.addEventListener("mousemove" ,(e) => {
@@ -55,8 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const percentage = (mouseDelta / 2000) * -100;
             const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
             const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
-            prevPercentage = nextPercentage;
-            transform =  `translate3d(${nextPercentage}%, -50%, 0)`
+            prevPercentage = nextPercentage;  
+            transform =  `translate3d(${nextPercentage}%, -50%, 0)`;
         }
     })
 
@@ -68,15 +75,15 @@ function animateImages(){
         if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
-                images[i].animate({objectPosition: posiciones[i]}, {duration: 1200, fill: "forwards"})
-                old_posiciones[i] = posiciones [i]
+                images[i].animate({objectPosition: posiciones[i]}, {duration: 1200, fill: "forwards"});
+                old_posiciones[i] = posiciones [i];
             }
         }}
         track.animate({transform: transform},{duration: 1000, fill: "forwards"});
-        window.requestAnimationFrame(animateImages)        
+        window.requestAnimationFrame(animateImages);        
     }
-    window.requestAnimationFrame(animateImages)             
-})
+    window.requestAnimationFrame(animateImages);
+});
 
 
 /*Ideas*/
@@ -183,3 +190,8 @@ function debounce(fn, duration) {
             requestAnimationFrame(function(){animateImages()})
     }*/
      
+    /*
+    function lerp(min, max, fraction) {
+        return (max - min) * fraction + min;
+      }
+*/
