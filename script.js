@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-    const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                                window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     const track = document.querySelector("#track");
     const images = [...document.querySelectorAll('.image')]
     let control = images[0].getBoundingClientRect().left
@@ -11,14 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let posiciones = images.map(calcularPosicion)
     let old_posiciones = images.map(calcularPosicion)
     let transform = ''
-    let old_transform = ''
+    let old_transform = '' // esto parece jankear la animacion si lo pongo en el animateImages()
+
     for (let i = 0; i < images.length; i++) { 
             images[i].style.objectPosition = posiciones[i]
         }
 
     function calcularPosicion(image){
-        let elRect  =   image.getBoundingClientRect();
-        //if  (elRect.left + elRect.width <= 0 && elRect.right - elRect.width - window.innerWidth >= 0) return 0
+            let elRect  =   image.getBoundingClientRect();
+        if  (elRect.left + elRect.width <= 0 && elRect.right - elRect.width - window.innerWidth >= 0) return 0
             let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
             let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
             posicion = `${posicion}% center`
@@ -26,16 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }  
 
     function mapPosiciones(){
-            if (!(images[0].getBoundingClientRect().left == control)) {
+        if (!(images[0].getBoundingClientRect().left == control)) {
             posiciones = images.map(calcularPosicion)
             control = images[0].getBoundingClientRect().left
             console.log(1)
         }
     }
-
+    
+    let fps = 60
     function loop(){
         mapPosiciones()
-        setTimeout(loop, 10)
+        setTimeout(loop, 1000 / fps)
     }
     loop()
 
@@ -62,25 +61,24 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
 
+
 /* Puse ambas animaciones  en la misma funcion. 
 Saque toda modificacion de atributos de la animacion. 
 Tambien verifico que algo haya cambiado antes de animar*/ 
-    function animateImages(){
-        if(old_transform !== transform){
-            //track.animate({transform: `translate3d(${transform}%, -50%, 0)`},{duration: 1000, fill: "forwards"});
-            track.animate({transform: transform},{duration: 1000, fill: "forwards"});
-            old_transform = transform
-        }
+
+function animateImages(){
+        if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
-            if(posiciones[i] !== old_posiciones[i]){
+            if(posiciones[i] != old_posiciones[i]){
                 //images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 1000, fill: "forwards"})
-                images[i].animate({objectPosition: posiciones[i]}, {duration: 1000, fill: "forwards"})
+                images[i].animate({objectPosition: posiciones[i]}, {duration: 1200, fill: "forwards"})
                 old_posiciones[i] = posiciones [i]
             }
-        }
-        requestAnimationFrame(function(){animateImages()});
-    }   
-requestAnimationFrame(function(){animateImages()});
+        }}
+        track.animate({transform: transform},{duration: 1000, fill: "forwards"});
+        window.requestAnimationFrame(animateImages)        
+    }
+    window.requestAnimationFrame(animateImages)             
 })
 
 
