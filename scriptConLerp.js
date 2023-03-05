@@ -9,11 +9,15 @@ let old_posiciones = images.map(calcularPosicion);
 let transform = '';
 let old_transform = '';  // este control parece jankear la animacion si lo pongo en el animateImages()
 
+function lerp(start, end, t) {
+    return start * (1-t) + end * t;
+}   
+
 let fps = 60; /*esto es para el loop que calcula las posiciones de las imagenes*/ 
 
 function init() {
     for (let i = 0; i < images.length; i++) { 
-        images[i].style.objectPosition = posiciones[i]
+        images[i].style.objectPosition = `${posiciones[i]}% center`
     }
   } 
 
@@ -22,8 +26,7 @@ function calcularPosicion(image){
     let elRect  =   image.getBoundingClientRect();
     if  (elRect.left + elRect.width <= 0 && elRect.right - elRect.width - window.innerWidth >= 0) return 0;
     let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100;
-    let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0);
-    posicion = `${posicion}% center`;
+    let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0);  
     return posicion;
 };
 
@@ -47,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("mousedown",(e) =>{
         mouseDownAt = e.clientX;
+
     })
 
     window.addEventListener("mouseup"   ,(e) => {
@@ -55,15 +59,16 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     window.addEventListener("mousemove" ,(e) => {
-        if(mouseDownAt  >= 0) {
+        if(mouseDownAt >= 0) {
             const mouseDelta = parseFloat(mouseDownAt) - e.clientX;    
             /*No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
-            /*const   maxDelta = window.innerWidth / 2;*/ 
+            /*const   maxDelta = window.innerWidth / 2;*/
             const percentage = (mouseDelta / 2000) * -100;
             const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
-            const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
-            prevPercentage = nextPercentage;  
+            let nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
+            nextPercentage = lerp(prevPercentage,nextPercentage,0.1)
             transform =  `translate3d(${nextPercentage}%, -50%, 0)`;
+            prevPercentage = nextPercentage;  
         }
     })
 
@@ -71,15 +76,16 @@ document.addEventListener("DOMContentLoaded", () => {
 Saque toda modificacion de atributos de la animacion. 
 Tambien verifico que algo haya cambiado antes de animar*/ 
 
-function animateImages(){
+    function animateImages(){
         if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
-                images[i].animate({objectPosition: posiciones[i]}, {duration: 1200, fill: "forwards"});
+                posiciones[i] = lerp(old_posiciones[i],posiciones[i],0.1)
+                images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 800, fill: "forwards"});
                 old_posiciones[i] = posiciones [i];
             }
         }}
-        track.animate({transform: transform},{duration: 1000, fill: "forwards"});
+        track.animate({transform: transform},{duration: 800, fill: "forwards"});    
         window.requestAnimationFrame(animateImages);        
     }
     window.requestAnimationFrame(animateImages);
@@ -200,26 +206,4 @@ function debounce(fn, duration) {
     2 - 87.5  
     3 - 93.75
     etc
-*/
-
-//para calcular en base al viewport
-/*
-function vh(percent) {
-    var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-    return (percent * h) / 100;
-  }
-  
-  function vw(percent) {
-    var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    return (percent * w) / 100;
-  }
-  
-  function vmin(percent) {
-    return Math.min(vh(percent), vw(percent));
-  }
-  
-  function vmax(percent) {
-    return Math.max(vh(percent), vw(percent));
-  }
-
 */
