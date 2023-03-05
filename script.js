@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!(images[0].getBoundingClientRect().left == control)) {
             posiciones = images.map(calcularPosicion)
             control = images[0].getBoundingClientRect().left
-            console.log(1)
         }
     }
     
