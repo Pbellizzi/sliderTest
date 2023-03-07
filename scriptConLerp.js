@@ -86,33 +86,29 @@ document.addEventListener("DOMContentLoaded", () => {
     for (image of images){
     image.addEventListener("click", function() {
         if (listeners === 1){
+            cancelAnimationFrame(request)
             window.removeEventListener("mousedown",onMouseDown)
             window.removeEventListener("mouseup",onMouseUp)
             window.removeEventListener("mousemove",onMouseMove)
-            cancelAnimationFrame(request)
-            track.style.left = "0px"
-            track.style.gap = "0px"
             track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 800, fill: "forwards"});
+            track.style.gap = "0px"
+            track.style.left = "0%"
+
             listeners = 0   
         } else {
-            window.addEventListener("mousedown",onMouseDown)
-            window.addEventListener("mouseup",onMouseUp)
-            window.addEventListener("mousemove" , onMouseMove)
+            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: 800, fill: "forwards"});
             track.style.left = "50%"
             track.style.gap = "3vmin"
-            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: 800, fill: "forwards"});
-            animateImages()
+                    
+            setTimeout(function() {
+                window.addEventListener("mousedown",onMouseDown)
+                window.addEventListener("mouseup",onMouseUp)
+                window.addEventListener("mousemove" , onMouseMove)
+                animateImages()
+            }, 900);
             listeners = 1
-        }
-        //track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 500, fill: "forwards"});
-        //track.style.left = "0px"
-        //track.style.gap = "0px"
-        
+        }  
         this.classList.toggle("is-active");
-
-        //this.classList.toggle("is-centered");
-
-        //this.parentElement.classList.toggle("is-active");
 
     })
     };

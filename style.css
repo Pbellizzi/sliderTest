@@ -38,7 +38,7 @@ body{
     -webkit-user-drag: none; 
     transition-property: all;
     transition-duration: 0.8s;
-    transition-timing-function: ease-in-out;
+    transition-timing-function: linear;
 } 
 
 #track > .image{
@@ -54,13 +54,13 @@ body{
     -webkit-user-drag: none;
     transition-property:all;
     transition-duration: 0.8s;
-    transition-timing-function: ease-in-out;
+    transition-timing-function: linear
 }
 #track > .image.is-active {
     transition-property: all;
     transition-duration: 0.8s;
     /*transition-delay: 0.8s;*/
-    transition-timing-function: ease-in-out;
+    transition-timing-function: linear;
     width: 100vw;
     height: 100vh;
 }
