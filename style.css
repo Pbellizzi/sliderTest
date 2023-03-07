@@ -2,7 +2,16 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: hidden
+    overflow: hidden;
+    user-select: none;
+}
+
+html{
+    width: 100vw;
+}
+
+a{
+    user-select: none;
 }
 
 body{
@@ -11,20 +20,6 @@ body{
     background-color: black;
     margin: 0rem;
     overflow: hidden;
-}
-
-
-#track > .image{
-    width: 40vmin;
-    height: 56vmin;
-    object-fit: cover;
-    will-change: object-position;
-    object-position: 100% center;
-    user-select: none;
-    -moz-user-select: none; 
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -webkit-user-drag: none;              
 }
 
 #track{
@@ -41,4 +36,51 @@ body{
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-user-drag: none; 
+    transition-property: left;
+    transition-duration: 0.8s;
+    transition-timing-function: ease-in-out;
 } 
+
+#track > .image{
+    width: 40vmin;
+    height: 56vmin;
+    object-fit: cover;
+    will-change: object-position;
+    object-position: 100% center;
+    user-select: none;
+    -moz-user-select: none; 
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    transition-property:all;
+    transition-duration: 0.8s;
+    transition-timing-function: ease-in-out;
+}
+
+#track:has(.image.is-active) .image:not(.image.is-active){
+    transition-property: all;
+    /*transition-delay: 1s;*/
+    transition-duration: 0.8s;
+    transition-timing-function: ease-in-out;
+    width: 0px;
+    height: 0px;
+}
+
+#track > .image.is-active {
+    transition-property: all;
+    transition-duration: 0.8s;
+    transition-timing-function: ease-in-out;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+#track:has(.image.is-active) {
+    transition-property: all;
+    transition-duration: 0.8s;
+    transition-timing-function: ease-in-out;
+    display: flex;  
+    left: 0px;
+    gap: 0px;
+}
+

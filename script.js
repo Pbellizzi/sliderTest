@@ -4,15 +4,17 @@ let control = images[0].getBoundingClientRect().left; /*imagen arbitraria para c
 let mouseDownAt     = 0; 
 let movedPercentage = 0; 
 let prevPercentage  = 0;
-let posiciones = images.map(calcularPosicion);
-let old_posiciones = images.map(calcularPosicion);
+let posiciones = [];
+let old_posiciones = [];
 let transform = '';
 let old_transform = '';  // este control parece jankear la animacion si lo pongo en el animateImages()
 
 let fps = 60; /*esto es para el loop que calcula las posiciones de las imagenes*/ 
 
 function init() {
-    for (let i = 0; i < images.length; i++) { 
+    posiciones = images.map(calcularPosicion);
+    old_posiciones = images.map(calcularPosicion);
+    for (let i = 0; i < images.length; i++) {       
         images[i].style.objectPosition = posiciones[i]
     }
   } 
@@ -36,7 +38,6 @@ function mapPosiciones(){
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-
     init()
 
     function loop(){
@@ -63,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
             const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
             prevPercentage = nextPercentage;  
+
             transform =  `translate3d(${nextPercentage}%, -50%, 0)`;
         }
     })
@@ -80,7 +82,8 @@ function animateImages(){
             }
         }}
         track.animate({transform: transform},{duration: 2000, fill: "forwards"});
-        window.requestAnimationFrame(animateImages);        
+        window.requestAnimationFrame(animateImages);
+
     }
     window.requestAnimationFrame(animateImages);
 });

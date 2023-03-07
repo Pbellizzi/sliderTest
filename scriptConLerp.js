@@ -4,10 +4,10 @@ let control = images[0].getBoundingClientRect().left; /*imagen arbitraria para c
 let mouseDownAt     = 0; 
 let movedPercentage = 0; 
 let prevPercentage  = 0;
-let posiciones = images.map(calcularPosicion);
-let old_posiciones = images.map(calcularPosicion);
-let transform = '';
-let old_transform = '';  // este control parece jankear la animacion si lo pongo en el animateImages()
+let posiciones = [] 
+let old_posiciones = []
+let transform = 0;
+let old_transform = 0;  // este control parece jankear la animacion si lo pongo en el animateImages()
 
 function lerp(start, end, t) {
     return start * (1-t) + end * t;
@@ -16,6 +16,8 @@ function lerp(start, end, t) {
 let fps = 60; /*esto es para el loop que calcula las posiciones de las imagenes*/ 
 
 function init() {
+    posiciones = images.map(calcularPosicion);
+    old_posiciones = images.map(calcularPosicion);
     for (let i = 0; i < images.length; i++) { 
         images[i].style.objectPosition = `${posiciones[i]}% center`
     }
@@ -37,9 +39,35 @@ function mapPosiciones(){
 
     };
 };
+function onMouseMove(e){
+    if(mouseDownAt >= 0) {
+        const mouseDelta = parseFloat(mouseDownAt) - e.clientX;    
+        /*No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
+        /*const   maxDelta = window.innerWidth / 2;*/
+        const percentage = (mouseDelta / 2000) * -100;
+        const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
+        let nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
+        transform = nextPercentage
+        
+        //nextPercentage = lerp(prevPercentage,nextPercentage,0.1)
+        //transform =  `translate3d(${nextPercentage}%, -50%, 0)`;
+        prevPercentage = nextPercentage;  
+    }
+}
+
+function onMouseDown(e){
+    mouseDownAt = e.clientX;
+}
+
+function onMouseUp(e){
+    mouseDownAt = -1;
+    movedPercentage = prevPercentage;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
+ /*images.map(calcularPosicion);*/
+ 
     init()
 
     function loop(){
@@ -48,27 +76,31 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     loop();
 
-    window.addEventListener("mousedown",(e) =>{
-        mouseDownAt = e.clientX;
-    })
-    window.addEventListener("mouseup"   ,(e) => {
-        mouseDownAt = -1;
-        movedPercentage = prevPercentage;
-    })
 
-    window.addEventListener("mousemove" ,(e) => {
-        if(mouseDownAt >= 0) {
-            const mouseDelta = parseFloat(mouseDownAt) - e.clientX;    
-            /*No estoy usando el ancho de la pantalla para determinar la velocidad del scroll*/
-            /*const   maxDelta = window.innerWidth / 2;*/
-            const percentage = (mouseDelta / 2000) * -100;
-            const nextPercentageUnconstrained = parseFloat(movedPercentage) + percentage;
-            let nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
-            nextPercentage = lerp(prevPercentage,nextPercentage,0.1)
-            transform =  `translate3d(${nextPercentage}%, -50%, 0)`;
-            prevPercentage = nextPercentage;  
+    window.addEventListener("mousedown",onMouseDown)
+    window.addEventListener("mouseup",onMouseUp)
+    window.addEventListener("mousemove" , onMouseMove)
+
+    let listeners = 1
+    for (image of images){
+    image.addEventListener("click", function() {
+        if (listeners === 1){
+            window.removeEventListener("mousedown",onMouseDown)
+            window.removeEventListener("mouseup",onMouseUp)
+            window.removeEventListener("mousemove",onMouseMove)
+            listeners = 0   
+        } else {
+            window.addEventListener("mousedown",onMouseDown)
+            window.addEventListener("mouseup",onMouseUp)
+            window.addEventListener("mousemove" , onMouseMove)
+            listeners = 1
         }
+        this.classList.toggle("is-active");
+        this.parentElement.classList.toggle("is-active");
+
     })
+    };
+    
 
 /* Puse ambas animaciones  en la misma funcion. 
 Saque toda modificacion de atributos de la animacion. 
@@ -78,12 +110,17 @@ Tambien verifico que algo haya cambiado antes de animar*/
         if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
-                posiciones[i] = lerp(old_posiciones[i],posiciones[i],0.8)
+                posiciones[i] = lerp(old_posiciones[i],posiciones[i],0.5)
                 images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 3000, fill: "forwards"});
                 old_posiciones[i] = posiciones [i];
             }
         }}
-        track.animate({transform: transform},{duration: 2000, fill: "forwards"});    
+        if(transform != old_transform){
+        transform = lerp(old_transform,transform,0.5)
+        track.animate({transform: `translate3d(${transform}%, -50%, 0)`},{duration: 2000, fill: "forwards"});    
+        //track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
+        old_transform = transform
+    }  
         window.requestAnimationFrame(animateImages);        
     }
     window.requestAnimationFrame(animateImages);
