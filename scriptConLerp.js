@@ -10,6 +10,8 @@ let transform = 0;
 let old_transform = 0;  // este control parece jankear la animacion si lo pongo en el animateImages()
 //let xPosition = clientX
 
+
+
 function lerp(start, end, t) {
     return start * (1-t) + end * t;
 }   
@@ -65,10 +67,41 @@ function onMouseUp(e){
     movedPercentage = prevPercentage;
 }
 
+function arrows(e) {
+    let actual,siguiente,anterior
+    switch (e.code) {
+        case "ArrowLeft":
+            actual = images[images.indexOf(document.getElementById("current"))]
+            anterior = images[images.indexOf(document.getElementById("current"))-1]
+
+            if (anterior) {
+                actual.click();
+                anterior.click()};
+            break;
+        case "ArrowRight":
+            actual = images[images.indexOf(document.getElementById("current"))]
+            siguiente = images[images.indexOf(document.getElementById("current"))+1]
+
+            if (siguiente) {
+                actual.click();
+                siguiente.click()};
+           
+            break;
+        case "ArrowUp":
+            // Up pressed
+            break;
+        case "ArrowDown":
+            // Down pressed
+            break;
+    }
+}
+
+//-----------------------------------------------------------------------------////-----------------------------------------------------------------------------//
+
 document.addEventListener("DOMContentLoaded", () => {
 
- /*images.map(calcularPosicion);*/
- 
+
+    
     init()
 
     function loop(){
@@ -82,27 +115,32 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("mouseup",onMouseUp)
     window.addEventListener("mousemove" , onMouseMove)
 
+
+    window.addEventListener('keydown',arrows)
+    
     let listeners = 1
     for (image of images){
     image.addEventListener("click", function(e) {
         if (listeners === 1){
+            this.setAttribute("id","current");
+            window.addEventListener('keydown',arrows)
             cancelAnimationFrame(request)
             window.removeEventListener("mousedown",onMouseDown)
             window.removeEventListener("mouseup",onMouseUp)
-            window.removeEventListener("mousemove",onMouseMove)
+            window.removeEventListener("mousemove",onMouseMove)   
+            ;     
             /*quizás meter un lerp con un intervalo acá*/
             e.currentTarget.animate([{width: "40vmin"},{width: "100vw"}],{duration: 700, fill: "forwards"});
             e.currentTarget.animate([{height: "56vmin"},{height: "100vh"}],{duration: 700, fill: "forwards"});
             for (image of images){if (image != e.currentTarget){
                 image.animate([{width: "40vmin"},{width: "0vw"}],{duration: 700, fill: "forwards"});
-                image.animate([{height: "56vmin"},{height: "0h"}],{duration: 700, fill: "forwards"});
+                image.animate([{height: "56vmin"},{height: "0vh"}],{duration: 700, fill: "forwards"});
             }}
             track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 700, fill: "forwards"});
             track.animate([{gap: "3vmin"},{gap: "0px"}],{duration: 700, fill: "forwards"});
             track.animate([{left: "50%"},{left: "0%"}],{duration: 700, fill: "forwards"});
             //track.style.gap = "0px"
             //track.style.left = "0%"
-
             listeners = 0   
         } else {
             track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: 700, fill: "forwards"});
@@ -114,8 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 image.animate([{width: "0vw"},{width: "40vmin"}],{duration: 700, fill: "forwards"});
                 image.animate([{height: "0vh"},{height: "56vmin"}],{duration: 700, fill: "forwards"});
             }}
-            //track.style.left = "50%"
-            //track.style.gap = "3vmin"       
+    
             setTimeout(function() {
                 window.addEventListener("mousedown",onMouseDown)
                 window.addEventListener("mouseup",onMouseUp)
@@ -123,7 +160,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 animateImages()
             }, 600);
             listeners = 1
-        }  
+            this.removeAttribute("id")
+            window.removeEventListener('keydown',arrows)
+        }
+        
+        
         //this.classList.toggle("is-active");
 
     })
@@ -146,7 +187,7 @@ Tambien verifico que algo haya cambiado antes de animar*/
         if(transform != old_transform){
         transform = lerp(old_transform,transform,0.5)
         track.animate({transform: `translate3d(${transform}%, -50%, 0)`},{duration: 2000, fill: "forwards"});    
-        track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
+        //track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
         old_transform = transform
     }  
         request = window.requestAnimationFrame(animateImages);        
