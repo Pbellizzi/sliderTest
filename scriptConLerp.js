@@ -84,31 +84,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let listeners = 1
     for (image of images){
-    image.addEventListener("click", function() {
+    image.addEventListener("click", function(e) {
         if (listeners === 1){
             cancelAnimationFrame(request)
             window.removeEventListener("mousedown",onMouseDown)
             window.removeEventListener("mouseup",onMouseUp)
             window.removeEventListener("mousemove",onMouseMove)
-            track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 800, fill: "forwards"});
-            track.style.gap = "0px"
-            track.style.left = "0%"
+            /*quizás meter un lerp con un intervalo acá*/
+            e.currentTarget.animate([{width: "40vmin"},{width: "100vw"}],{duration: 700, fill: "forwards"});
+            e.currentTarget.animate([{height: "56vmin"},{height: "100vh"}],{duration: 700, fill: "forwards"});
+            for (image of images){if (image != e.currentTarget){
+                image.animate([{width: "40vmin"},{width: "0vw"}],{duration: 700, fill: "forwards"});
+                image.animate([{height: "56vmin"},{height: "0h"}],{duration: 700, fill: "forwards"});
+            }}
+            track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 700, fill: "forwards"});
+            track.animate([{gap: "3vmin"},{gap: "0px"}],{duration: 700, fill: "forwards"});
+            track.animate([{left: "50%"},{left: "0%"}],{duration: 700, fill: "forwards"});
+            //track.style.gap = "0px"
+            //track.style.left = "0%"
 
             listeners = 0   
         } else {
-            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: 800, fill: "forwards"});
-            track.style.left = "50%"
-            track.style.gap = "3vmin"
-                    
+            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: 700, fill: "forwards"});
+            track.animate([{gap: "0px"},{gap: "3vmin"}],{duration: 700, fill: "forwards"});
+            track.animate([{left: "0%"},{left: "50%"}],{duration: 700, fill: "forwards"});
+            e.currentTarget.animate([{width: "100vw"},{width: "40vmin"}],{duration: 700, fill: "forwards"});
+            e.currentTarget.animate([{height: "100vh"},{height: "56vmin"}],{duration: 700, fill: "forwards"});
+            for (image of images){if (image != e.currentTarget){
+                image.animate([{width: "0vw"},{width: "40vmin"}],{duration: 700, fill: "forwards"});
+                image.animate([{height: "0vh"},{height: "56vmin"}],{duration: 700, fill: "forwards"});
+            }}
+            //track.style.left = "50%"
+            //track.style.gap = "3vmin"       
             setTimeout(function() {
                 window.addEventListener("mousedown",onMouseDown)
                 window.addEventListener("mouseup",onMouseUp)
                 window.addEventListener("mousemove" , onMouseMove)
                 animateImages()
-            }, 900);
+            }, 600);
             listeners = 1
         }  
-        this.classList.toggle("is-active");
+        //this.classList.toggle("is-active");
 
     })
     };

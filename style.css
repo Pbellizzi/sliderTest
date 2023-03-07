@@ -36,9 +36,9 @@ body{
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-user-drag: none; 
-    transition-property: all;
+   /*transition-property: all;
     transition-duration: 0.8s;
-    transition-timing-function: linear;
+    transition-timing-function: linear;*/
 } 
 
 #track > .image{
@@ -52,25 +52,25 @@ body{
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-user-drag: none;
-    transition-property:all;
+    /*transition-property:all;
     transition-duration: 0.8s;
-    transition-timing-function: linear
+    transition-timing-function: linear*/
 }
+/*
 #track > .image.is-active {
     transition-property: all;
     transition-duration: 0.8s;
-    /*transition-delay: 0.8s;*/
-    transition-timing-function: linear;
+     transition-timing-function: ease;
     width: 100vw;
     height: 100vh;
 }
 #track:has(.image.is-active) .image:not(.image.is-active){
     transition-property: all;
     transition-duration: 0.8s;
-    transition-timing-function: linear;
+    transition-timing-function: ease;
     width: 0px;
     height: 0px;
-}
+}*/
 
 
 /*
