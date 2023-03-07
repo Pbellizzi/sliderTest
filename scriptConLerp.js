@@ -89,20 +89,19 @@ document.addEventListener("DOMContentLoaded", () => {
             window.removeEventListener("mousedown",onMouseDown)
             window.removeEventListener("mouseup",onMouseUp)
             window.removeEventListener("mousemove",onMouseMove)
-
+            cancelAnimationFrame(request)
             track.style.left = "0px"
             track.style.gap = "0px"
             track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 800, fill: "forwards"});
-
             listeners = 0   
         } else {
             window.addEventListener("mousedown",onMouseDown)
             window.addEventListener("mouseup",onMouseUp)
             window.addEventListener("mousemove" , onMouseMove)
-
             track.style.left = "50%"
             track.style.gap = "3vmin"
             track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: 800, fill: "forwards"});
+            animateImages()
             listeners = 1
         }
         //track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 500, fill: "forwards"});
@@ -135,12 +134,12 @@ Tambien verifico que algo haya cambiado antes de animar*/
         if(transform != old_transform){
         transform = lerp(old_transform,transform,0.5)
         track.animate({transform: `translate3d(${transform}%, -50%, 0)`},{duration: 2000, fill: "forwards"});    
-        //track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
+        track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
         old_transform = transform
     }  
-        window.requestAnimationFrame(animateImages);        
+        request = window.requestAnimationFrame(animateImages);        
     }
-    window.requestAnimationFrame(animateImages);
+    request = window.requestAnimationFrame(animateImages);
 });
 
 
