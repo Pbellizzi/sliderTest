@@ -96,6 +96,7 @@ function arrows(e) {
     }
 }
 
+
 //-----------------------------------------------------------------------------////-----------------------------------------------------------------------------//
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -116,63 +117,54 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("mousemove" , onMouseMove)
 
     let duration = 1000
+    function zoomIn(e){
+            e.currentTarget.animate([{width: "20vw"},{width: "100vw"}],{duration: duration, fill: "forwards"});
+            e.currentTarget.animate([{height: "56vh"},{height: "100vh"}],{duration: duration, fill: "forwards"});
+            for (image of images){if (image != e.currentTarget){
+                image.animate([{width: "20vw"},{width: "0vw"}],{duration: duration, fill: "forwards"});
+                image.animate([{height: "56vh"},{height: "0vh"}],{duration:  duration, fill: "forwards"});
+            }}
+            track.animate([{gap: "2vw"},{gap: "0px"}],{duration: duration, fill: "forwards"});
+            track.animate({transform: `translate3d(0%, -50%, 0)`},{duration:  duration, fill: "forwards"});
+            track.animate([{left: "50%"},{left: "0%"}],{duration: duration, fill: "forwards"});
+            window.requestAnimationFrame(zoomIn)
+    }
+
+    function zoomOut(e){
+            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration:  duration, fill: "forwards"});
+            track.animate([{gap: "0px"},{gap: "2vw"}],{duration: duration, fill: "forwards"});
+            track.animate([{left: "0%"},{left: "50%"}],{duration: duration, fill: "forwards"});
+            e.currentTarget.animate([{width: "100vw"},{width: "20vw"}],{duration: duration, fill: "forwards"});
+            e.currentTarget.animate([{height: "100vh"},{height: "56vh"}],{duration: duration, fill: "forwards"});
+            for (image of images){if (image != e.currentTarget){
+                image.animate([{width: "0vw"},{width: "20vw"}],{duration:  duration, fill: "forwards"});
+                image.animate([{height: "0vh"},{height: "56vh"}],{duration:  duration, fill: "forwards"});
+            }}
+        window.requestAnimationFrame(zoomOut)
+    }
+    
     let listeners = 1
     for (image of images){
     image.addEventListener("click", function(e) {
-        if (listeners === 1){
-            this.setAttribute("id","current");
-            console.log(this)
-            window.addEventListener('keydown',arrows);
+        if (listeners === 1){           
             cancelAnimationFrame(request);
             window.removeEventListener("mousedown",onMouseDown);
             window.removeEventListener("mouseup",onMouseUp);
             window.removeEventListener("mousemove",onMouseMove);     
             /*quizás meter un lerp con un intervalo acá*/
-            e.currentTarget.animate([{width: "40vmin"},{width: "100vw"}],{duration: duration, fill: "forwards"});
-            e.currentTarget.animate([{height: "56vmin"},{height: "100vh"}],{duration: duration, fill: "forwards"});
-            /*for (image of images){if (image != e.currentTarget){
-                image.style.display = "none"
-                image.animate([{width: "40vmin"},{width: "100vw"}],{duration: 700, fill: "forwards"});
-                image.animate([{height: "56vmin"},{height: "100vh"}],{duration: 700, fill: "forwards"});
-            }}*/
-            for (image of images){if (image != e.currentTarget){
-                image.animate([{width: "40vmin"},{width: "0vw"}],{duration: duration-200, fill: "forwards"});
-                image.animate([{height: "56vmin"},{height: "0vh"}],{duration:  duration-200, fill: "forwards"});
-            }}
-            track.animate([{left: "50%"},{left: "0%"}],{duration: duration, fill: "forwards"});
-            track.animate({transform: `translate3d(0px, -50%, 0)`},{duration:  duration-200, fill: "forwards"});
-            track.animate([{gap: "3vmin"},{gap: "0px"}],{duration: duration, fill: "forwards"});
-
+            zoomIn(e)
             listeners = 0   
         } else {
-            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration:  duration, fill: "forwards"});
-            track.animate([{gap: "0px"},{gap: "3vmin"}],{duration: duration, fill: "forwards"});
-            track.animate([{left: "0%"},{left: "50%"}],{duration: duration, fill: "forwards"});
-            e.currentTarget.animate([{width: "100vw"},{width: "40vmin"}],{duration: duration, fill: "forwards"});
-            e.currentTarget.animate([{height: "100vh"},{height: "56vmin"}],{duration: duration, fill: "forwards"});
-            /*for (image of images){if (image != e.currentTarget){
-                image.animate([{width: "100vw"},{width: "40vmin"}],{duration: 700, fill: "forwards"});
-                image.animate([{height: "100vh"},{height: "56vmin"}],{duration: 700, fill: "forwards"});
-                image.style.display = "block"
-            }}*/
-            for (image of images){if (image != e.currentTarget){
-                image.animate([{width: "0vw"},{width: "40vmin"}],{duration:  duration-200, fill: "forwards"});
-                image.animate([{height: "0vh"},{height: "56vmin"}],{duration:  duration-200, fill: "forwards"});
-            }}
+            zoomOut(e)
             setTimeout(function() {
                 window.addEventListener("mousedown",onMouseDown)
                 window.addEventListener("mouseup",onMouseUp)
                 window.addEventListener("mousemove" , onMouseMove)
                 animateImages()
-            }, 600);
+            }, 800);
             listeners = 1
-            this.removeAttribute("id")
-            window.removeEventListener('keydown',arrows)
-        }
-        
-        
+        } 
         //this.classList.toggle("is-active");
-
     })
     };
     
@@ -182,12 +174,12 @@ Saque toda modificacion de atributos de la animacion.
 Tambien verifico que algo haya cambiado antes de animar*/ 
 
     function animateImages(){
-        if(transform != old_transform){
+        //if(transform != old_transform){
             transform = lerp(old_transform,transform,0.5)
             track.animate({transform: `translate3d(${transform}%, -50%, 0)`},{duration: 800, fill: "forwards"});    
             //track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
-            old_transform = transform   
-        }     
+            old_transform = transform
+        //}     
         if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
@@ -196,8 +188,7 @@ Tambien verifico que algo haya cambiado antes de animar*/
                 old_posiciones[i] = posiciones [i];
             }
         }}
-
-        request = window.requestAnimationFrame(animateImages);        
+        request = window.requestAnimationFrame(animateImages);    
     }
     request = window.requestAnimationFrame(animateImages);
 });
@@ -207,10 +198,8 @@ Tambien verifico que algo haya cambiado antes de animar*/
 
     /*document.addEventListener( 'visibilitychange' , function() {
         if (document.hidden) {
-            console.log('bye');
             window.cancelAnimationFrame(animateImages)
         } else {
-            console.log('well back');
             window.requestAnimationFrame(animateImages)
             track.getAnimations().map((animation) => animation.finished)
         }
@@ -229,7 +218,6 @@ Tambien verifico que algo haya cambiado antes de animar*/
                ;*/
 /*
                Promise.all(image.getAnimations().map((animation) => animation.finished)).then(() => {
-                console.log(3) 
                 cancelAnimationFrame(request)}
                 )
 */
@@ -253,7 +241,6 @@ Tambien verifico que algo haya cambiado antes de animar*/
             { 
             let posicionFinal = Math.max(Math.min(posiciones[i]+prevPercentage*2, 100), 0)
             images[i].animate({objectPosition: `${(posicionFinal)}% center`}, {duration: 1200, fill: "forwards"})
-            console.log(posiciones[1]+prevPercentage)
         }
         }
     track.animate({transform: `translate3d(${prevPercentage}%, -50%, 0)`},{duration: 1000, fill: "forwards"});
@@ -301,7 +288,6 @@ function debounce(fn, duration) {
             let posicionUnconstrained  =  (elRect.left + elRect.width /2) / window.innerWidth * 100
             let posicion = Math.max(Math.min(posicionUnconstrained, 100), 0)
             image.animate({objectPosition: `${posicion}% center`}, {duration: 1200, fill: "forwards"})
-            console.log(2)
         }
         track.animate({transform: `translate3d(${prevPercentage}%, -50%, 0)`},{duration: 1000, fill: "forwards"});      
             requestAnimationFrame(function(){animateImages()})

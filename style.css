@@ -15,13 +15,13 @@ body{
     height: 100vh;
     background-color: black;
     margin: 0rem;
-    
 }
 
 #track{
-    /*margin-left: -20vmin; */
     display: flex;
-    gap: 3vmin;
+    will-change: left;
+    will-change: transform;
+    gap: 2vw;
     position: absolute;
     left:   50%;
     top:    50%;
@@ -32,60 +32,23 @@ body{
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-user-drag: none; 
-   /*transition-property: all;
-    transition-duration: 0.8s;
-    transition-timing-function: linear;*/
 } 
 
 #track > .image{
+    will-change: object-position;
+    will-change: width;
+    will-change: height;
+    width: 20vw;
+    height: 56vh;
+    /*
     width: 40vmin;
     height: 56vmin;
+    */
     object-fit: cover;
-    will-change: object-position;
     object-position: 100% center;
     user-select: none;
     -moz-user-select: none; 
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-user-drag: none;
-    /*transition-property:all;
-    transition-duration: 0.8s;
-    transition-timing-function: linear*/
 }
-
-
-/*
-#track > .image.is-active {
-    transition-property: all;
-    transition-duration: 0.8s;
-     transition-timing-function: ease;
-    width: 100vw;
-    height: 100vh;
-}
-#track:has(.image.is-active) .image:not(.image.is-active){
-    transition-property: all;
-    transition-duration: 0.8s;
-    transition-timing-function: ease;
-    width: 0px;
-    height: 0px;
-}*/
-
-
-/*
-.centered {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-*/
-/*
-#track:has(.image.is-active) {
-    transition-property: all;
-    transition-duration: 0.8s;
-    transition-timing-function: ease-in-out;
-    left: 0px;
-    gap: 0px;
-}
-
-*/
