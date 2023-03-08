@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("mouseup",onMouseUp)
     window.addEventListener("mousemove" , onMouseMove)
 
-    let duration = 500
+    let duration = 1000
     let listeners = 1
     for (image of images){
     image.addEventListener("click", function(e) {
@@ -136,15 +136,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 image.animate([{height: "56vmin"},{height: "100vh"}],{duration: 700, fill: "forwards"});
             }}*/
             for (image of images){if (image != e.currentTarget){
-                image.animate([{width: "40vmin"},{width: "0vw"}],{duration: duration, fill: "forwards"});
-                image.animate([{height: "56vmin"},{height: "0vh"}],{duration: duration, fill: "forwards"});
+                image.animate([{width: "40vmin"},{width: "0vw"}],{duration: duration-200, fill: "forwards"});
+                image.animate([{height: "56vmin"},{height: "0vh"}],{duration:  duration-200, fill: "forwards"});
             }}
-            track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: duration, fill: "forwards"});
-            track.animate([{gap: "3vmin"},{gap: "0px"}],{duration: duration, fill: "forwards"});
             track.animate([{left: "50%"},{left: "0%"}],{duration: duration, fill: "forwards"});
+            track.animate({transform: `translate3d(0px, -50%, 0)`},{duration:  duration-200, fill: "forwards"});
+            track.animate([{gap: "3vmin"},{gap: "0px"}],{duration: duration, fill: "forwards"});
+
             listeners = 0   
         } else {
-            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: duration, fill: "forwards"});
+            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration:  duration, fill: "forwards"});
             track.animate([{gap: "0px"},{gap: "3vmin"}],{duration: duration, fill: "forwards"});
             track.animate([{left: "0%"},{left: "50%"}],{duration: duration, fill: "forwards"});
             e.currentTarget.animate([{width: "100vw"},{width: "40vmin"}],{duration: duration, fill: "forwards"});
@@ -155,8 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 image.style.display = "block"
             }}*/
             for (image of images){if (image != e.currentTarget){
-                image.animate([{width: "0vw"},{width: "40vmin"}],{duration: duration, fill: "forwards"});
-                image.animate([{height: "0vh"},{height: "56vmin"}],{duration: duration, fill: "forwards"});
+                image.animate([{width: "0vw"},{width: "40vmin"}],{duration:  duration-200, fill: "forwards"});
+                image.animate([{height: "0vh"},{height: "56vmin"}],{duration:  duration-200, fill: "forwards"});
             }}
             setTimeout(function() {
                 window.addEventListener("mousedown",onMouseDown)
@@ -181,20 +182,21 @@ Saque toda modificacion de atributos de la animacion.
 Tambien verifico que algo haya cambiado antes de animar*/ 
 
     function animateImages(){
+        if(transform != old_transform){
+            transform = lerp(old_transform,transform,0.5)
+            track.animate({transform: `translate3d(${transform}%, -50%, 0)`},{duration: 800, fill: "forwards"});    
+            //track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
+            old_transform = transform   
+        }     
         if (!(images[0].getBoundingClientRect().left == control)){
         for (let i = 0; i < images.length; i++) { 
             if(posiciones[i] != old_posiciones[i]){
                 posiciones[i] = lerp(old_posiciones[i],posiciones[i],0.5)
-                images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 3000, fill: "forwards"});
+                images[i].animate({objectPosition: `${posiciones[i]}% center`}, {duration: 800, fill: "forwards"});
                 old_posiciones[i] = posiciones [i];
             }
         }}
-        if(transform != old_transform){
-        transform = lerp(old_transform,transform,0.5)
-        track.animate({transform: `translate3d(${transform}%, -50%, 0)`},{duration: 2000, fill: "forwards"});    
-        //track.animate({transform: transform},{duration: 2000, fill: "forwards"});  
-        old_transform = transform
-    }  
+
         request = window.requestAnimationFrame(animateImages);        
     }
     request = window.requestAnimationFrame(animateImages);
