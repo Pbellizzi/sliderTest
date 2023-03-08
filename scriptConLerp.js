@@ -115,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("mouseup",onMouseUp)
     window.addEventListener("mousemove" , onMouseMove)
 
+    let duration = 500
     let listeners = 1
     for (image of images){
     image.addEventListener("click", function(e) {
@@ -127,35 +128,35 @@ document.addEventListener("DOMContentLoaded", () => {
             window.removeEventListener("mouseup",onMouseUp);
             window.removeEventListener("mousemove",onMouseMove);     
             /*quizás meter un lerp con un intervalo acá*/
-            e.currentTarget.animate([{width: "40vmin"},{width: "100vw"}],{duration: 700, fill: "forwards"});
-            e.currentTarget.animate([{height: "56vmin"},{height: "100vh"}],{duration: 700, fill: "forwards"});
+            e.currentTarget.animate([{width: "40vmin"},{width: "100vw"}],{duration: duration, fill: "forwards"});
+            e.currentTarget.animate([{height: "56vmin"},{height: "100vh"}],{duration: duration, fill: "forwards"});
             /*for (image of images){if (image != e.currentTarget){
                 image.style.display = "none"
                 image.animate([{width: "40vmin"},{width: "100vw"}],{duration: 700, fill: "forwards"});
                 image.animate([{height: "56vmin"},{height: "100vh"}],{duration: 700, fill: "forwards"});
             }}*/
             for (image of images){if (image != e.currentTarget){
-                image.animate([{width: "40vmin"},{width: "0vw"}],{duration: 700, fill: "forwards"});
-                image.animate([{height: "56vmin"},{height: "0vh"}],{duration: 700, fill: "forwards"});
+                image.animate([{width: "40vmin"},{width: "0vw"}],{duration: duration, fill: "forwards"});
+                image.animate([{height: "56vmin"},{height: "0vh"}],{duration: duration, fill: "forwards"});
             }}
-            track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: 700, fill: "forwards"});
-            track.animate([{gap: "3vmin"},{gap: "0px"}],{duration: 700, fill: "forwards"});
-            track.animate([{left: "50%"},{left: "0%"}],{duration: 700, fill: "forwards"});
+            track.animate({transform: `translate3d(0px, -50%, 0)`},{duration: duration, fill: "forwards"});
+            track.animate([{gap: "3vmin"},{gap: "0px"}],{duration: duration, fill: "forwards"});
+            track.animate([{left: "50%"},{left: "0%"}],{duration: duration, fill: "forwards"});
             listeners = 0   
         } else {
-            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: 700, fill: "forwards"});
-            track.animate([{gap: "0px"},{gap: "3vmin"}],{duration: 700, fill: "forwards"});
-            track.animate([{left: "0%"},{left: "50%"}],{duration: 700, fill: "forwards"});
-            e.currentTarget.animate([{width: "100vw"},{width: "40vmin"}],{duration: 700, fill: "forwards"});
-            e.currentTarget.animate([{height: "100vh"},{height: "56vmin"}],{duration: 700, fill: "forwards"});
+            track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration: duration, fill: "forwards"});
+            track.animate([{gap: "0px"},{gap: "3vmin"}],{duration: duration, fill: "forwards"});
+            track.animate([{left: "0%"},{left: "50%"}],{duration: duration, fill: "forwards"});
+            e.currentTarget.animate([{width: "100vw"},{width: "40vmin"}],{duration: duration, fill: "forwards"});
+            e.currentTarget.animate([{height: "100vh"},{height: "56vmin"}],{duration: duration, fill: "forwards"});
             /*for (image of images){if (image != e.currentTarget){
                 image.animate([{width: "100vw"},{width: "40vmin"}],{duration: 700, fill: "forwards"});
                 image.animate([{height: "100vh"},{height: "56vmin"}],{duration: 700, fill: "forwards"});
                 image.style.display = "block"
             }}*/
             for (image of images){if (image != e.currentTarget){
-                image.animate([{width: "0vw"},{width: "40vmin"}],{duration: 700, fill: "forwards"});
-                image.animate([{height: "0vh"},{height: "56vmin"}],{duration: 700, fill: "forwards"});
+                image.animate([{width: "0vw"},{width: "40vmin"}],{duration: duration, fill: "forwards"});
+                image.animate([{height: "0vh"},{height: "56vmin"}],{duration: duration, fill: "forwards"});
             }}
             setTimeout(function() {
                 window.addEventListener("mousedown",onMouseDown)
