@@ -118,25 +118,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let duration = 1000
     function zoomIn(e){
-            e.currentTarget.animate([{width: "20vw"},{width: "100vw"}],{duration: duration, fill: "forwards"});
+            e.currentTarget.animate([{width: "20vw"},{width: "100vw"}],{duration: duration , fill: "forwards"});
             e.currentTarget.animate([{height: "56vh"},{height: "100vh"}],{duration: duration, fill: "forwards"});
             for (image of images){if (image != e.currentTarget){
+                image.animate([{opacity: "0"}],{duration: duration, fill: "forwards"});
                 image.animate([{width: "20vw"},{width: "0vw"}],{duration: duration, fill: "forwards"});
                 image.animate([{height: "56vh"},{height: "0vh"}],{duration:  duration, fill: "forwards"});
             }}
             track.animate([{gap: "2vw"},{gap: "0px"}],{duration: duration, fill: "forwards"});
-            track.animate({transform: `translate3d(0%, -50%, 0)`},{duration:  duration, fill: "forwards"});
-            track.animate([{left: "50%"},{left: "0%"}],{duration: duration, fill: "forwards"});
+            track.animate({transform: `translate3d(-50%, -50%, 0)`},{duration:  duration, fill: "forwards"});
+            //track.animate([{left: "50%"},{left: "0%"}],{duration: duration, fill: "forwards"});
             window.requestAnimationFrame(zoomIn)
     }
 
     function zoomOut(e){
             track.animate({transform: `translate3d(${old_transform}%, -50%, 0)`},{duration:  duration, fill: "forwards"});
             track.animate([{gap: "0px"},{gap: "2vw"}],{duration: duration, fill: "forwards"});
-            track.animate([{left: "0%"},{left: "50%"}],{duration: duration, fill: "forwards"});
+            //track.animate([{left: "0%"},{left: "50%"}],{duration: duration, fill: "forwards"});
             e.currentTarget.animate([{width: "100vw"},{width: "20vw"}],{duration: duration, fill: "forwards"});
             e.currentTarget.animate([{height: "100vh"},{height: "56vh"}],{duration: duration, fill: "forwards"});
             for (image of images){if (image != e.currentTarget){
+                image.animate([{opacity: "1"}],{duration: duration, fill: "forwards"});
                 image.animate([{width: "0vw"},{width: "20vw"}],{duration:  duration, fill: "forwards"});
                 image.animate([{height: "0vh"},{height: "56vh"}],{duration:  duration, fill: "forwards"});
             }}
